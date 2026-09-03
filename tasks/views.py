@@ -13,3 +13,6 @@ def test(request):
         "names" : ["hasibul", "hasan", "nayon"]
     }
     return render(request, 'test.html', context)
+
+def create_task(request):
+    return render(request, 'task_form.html')
