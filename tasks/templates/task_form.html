@@ -8,10 +8,7 @@
 <body>
     <form method="POST">
         {% csrf_token %}
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title" placeholder="Enter title">
-        <label for="num">Number</label>
-        <input type="number" name="number" id="num" placeholder="Enter number">
+        {{ form.as_p }}
         <button type="submit">Submit</button>
     </form>
 </body>
