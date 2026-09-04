@@ -12,7 +12,7 @@ class StyledFormMixin:
                 })
             elif isinstance(field.widget, forms.Textarea):
                 field.widget.attrs.update({
-                    'class': self.default_classes,
+                    'class': f"{self.default_classes} resize-none",
                     'placeholder': f'Enter {field.label.lower()}',
                     'rows': 4,
                 })
@@ -24,6 +24,10 @@ class StyledFormMixin:
                 field.widget.attrs.update({
                     'class': 'space-y-2',
                 })
+            else:
+                field.widget.attrs.update({
+                    'class': self.default_classes,
+                })
 
 
 
@@ -32,6 +36,10 @@ class TaskModelForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = Task
         fields = ['title', 'description', 'due_date', 'assigned_to']
+        widgets = {
+            "due_date": forms.SelectDateWidget,
+            "assigned_to": forms.CheckboxSelectMultiple
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
