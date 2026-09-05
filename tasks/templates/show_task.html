@@ -7,16 +7,9 @@
 </head>
 <body>
     <div>
-        <ul>
-            {% for task in tasks %}
-            <li>
-                <p>{{task.title}}</p>
-                {% for emp in task.assigned_to.all %}
-                    <p>{{emp.name}}</p>
-                {% endfor %}
-            </li>
-            {% endfor %}
-        </ul>
+        {% for project in task_count %}
+            <p>{{project.name}} - Total Tasks: {{project.total_task}}</p>
+        {% endfor %}
     </div>
 </body>
 </html>
