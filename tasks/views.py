@@ -1,7 +1,9 @@
+from datetime import date
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from tasks.forms import TaskModelForm
-from tasks.models import Task
+from tasks.models import Task, TaskDetail, Project
 
 # Create your views here.
 def manager_dashboard(request):
@@ -30,8 +32,9 @@ def create_task(request):
 
 
 def view_task(request):
-    tasks = Task.objects.all() #retrieve all tasks from the db
+    """prefect_related(reverse foreign key & many to many relation e kaj kore)"""
 
-    tasks3 = Task.objects.get(id=3) #retrieve a specific task by id
-
-    return render(request, 'show_task.html', {'tasks': tasks, 'tasks3': tasks3})
+    # tasks = Project.objects.prefetch_related('task_set').all()
+    tasks = Task.objects.prefetch_related('assigned_to').all()
+    
+    return render(request, 'show_task.html', {'tasks': tasks})

@@ -9,12 +9,14 @@
     <div>
         <ul>
             {% for task in tasks %}
-            <li>{{task}}</li>
+            <li>
+                <p>{{task.title}}</p>
+                {% for emp in task.assigned_to.all %}
+                    <p>{{emp.name}}</p>
+                {% endfor %}
+            </li>
             {% endfor %}
         </ul>
-    </div>
-    <div>
-        {{tasks3}}
     </div>
 </body>
 </html>
