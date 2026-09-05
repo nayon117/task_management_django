@@ -1,13 +1,46 @@
 from django import forms
+from tasks.models import Task
 
-class TaskForm(forms.Form):
-    title = forms.CharField(max_length=250, label='Title')
-    description = forms.CharField(widget=forms.Textarea, label='Description')
-    due_date = forms.DateField(widget=forms.SelectDateWidget, label='Due Date')
-    assigned_to = forms.MultipleChoiceField(widget = forms.CheckboxSelectMultiple, choices = [], label='Assign To')
+class StyledFormMixin:
+    default_classes = 'w-full p-3 border border-gray-300 rounded-lg'
+    def apply_styled_widgets(self):
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.TextInput):
+                field.widget.attrs.update({
+                    'class': self.default_classes,
+                    'placeholder': f'Enter {field.label.lower()}',
+                })
+            elif isinstance(field.widget, forms.Textarea):
+                field.widget.attrs.update({
+                    'class': f"{self.default_classes} resize-none",
+                    'placeholder': f'Enter {field.label.lower()}',
+                    'rows': 4,
+                })
+            elif isinstance(field.widget, forms.SelectDateWidget):
+                field.widget.attrs.update({
+                    'class': 'p-2 border border-gray-300 rounded-lg',
+                })
+            elif isinstance(field.widget, forms.CheckboxSelectMultiple):
+                field.widget.attrs.update({
+                    'class': 'space-y-2',
+                })
+            else:
+                field.widget.attrs.update({
+                    'class': self.default_classes,
+                })
+
+
+
+# Django model form
+class TaskModelForm(StyledFormMixin, forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['title', 'description', 'due_date', 'assigned_to']
+        widgets = {
+            "due_date": forms.SelectDateWidget,
+            "assigned_to": forms.CheckboxSelectMultiple
+        }
 
     def __init__(self, *args, **kwargs):
-        employees = kwargs.pop('employees', [])
-        print("Employees in form init:", employees)  # Debugging line
         super().__init__(*args, **kwargs)
-        self.fields['assigned_to'].choices = [(employee.id, employee.name) for employee in employees]
+        self.apply_styled_widgets()

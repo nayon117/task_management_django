@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from tasks.forms import TaskForm
-from tasks.models import Employee
+from tasks.forms import TaskModelForm
 
 # Create your views here.
 def manager_dashboard(request):
@@ -17,7 +16,13 @@ def test(request):
     return render(request, 'test.html', context)
 
 def create_task(request):
-    employees = Employee.objects.all()
-    form = TaskForm(employees=employees)
+    form = TaskModelForm() #for GET
+
+    if request.method == 'POST':
+        form = TaskModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request,'task_form.html', {'form': form, 'message': 'Task created successfully!'})
+
     context = {"form": form}
     return render(request, 'task_form.html', context)
