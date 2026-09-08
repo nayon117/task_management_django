@@ -20,6 +20,7 @@
             <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full bg-green-500"></div>
             <span>{{ task.title }}</span>
+            <a class="px-2 py-2 bg-green-500 rounded text-white" href="{% url 'update-task' task.id %}">Edit</a>
             </div>
             <div>
             <span
