@@ -1,5 +1,5 @@
 from django import forms
-from tasks.models import Task
+from tasks.models import Task, TaskDetail
 
 class StyledFormMixin:
     default_classes = 'w-full p-3 border border-gray-300 rounded-lg'
@@ -40,6 +40,17 @@ class TaskModelForm(StyledFormMixin, forms.ModelForm):
             "due_date": forms.SelectDateWidget,
             "assigned_to": forms.CheckboxSelectMultiple
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
+
+# TaskDetailModelForm
+class TaskDetailModelForm(StyledFormMixin,forms.ModelForm):
+    class Meta:
+        model = TaskDetail
+        fields = ['priority', 'notes']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
