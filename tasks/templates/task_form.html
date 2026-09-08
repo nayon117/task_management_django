@@ -10,15 +10,19 @@
 <body>
     <div class="w-1/2 mx-auto mt-10">
         <div>
-        {% if message %}
-            <p>{{ message }}</p>
+        {% if messages %}
+            {% for message in messages %}
+            {% comment %} design the message like success = green bg, error = red bg based on success tags {% endcomment %}
+             <p class="px-2 py-1 {% if message.tags == 'success' %}bg-green-100 text-green-800{% elif message.tags == 'error' %}bg-red-100 text-red-800{% else %}bg-gray-100 text-gray-800{% endif %}"> {{ message }} </p>
+            {% endfor %}
         {% endif %}
     </div>
 
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="bg-gray-800 text-white  px-3 py-2 rounded-lg hover:bg-gray-700 mt-6">Submit</button>
+        {{ task_form.as_p }}
+        {{ task_detail_form.as_p }}
+        <button type="submit" class="bg-gray-800 text-white  px-3 py-2 rounded-lg hover:bg-gray-700 mt-3 mb-8">Submit</button>
     </form>
     </div>
 </body>

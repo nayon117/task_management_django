@@ -48,13 +48,13 @@ class TaskDetail(models.Model):
     MEDIUM = 'M'
     LOW = 'L'
     PRIORITY_OPTIONS = (
-        ('HIGH', 'High'),
-        ('MEDIUM', 'Medium'),
-        ('LOW', 'Low'),
+        (HIGH, 'High'),
+        (MEDIUM, 'Medium'),
+        (LOW, 'Low'),
     )
-    assigned_to = models.CharField(max_length=250)
+    # assigned_to = models.CharField(max_length=250)
     task = models.OneToOneField(Task, on_delete = models.CASCADE, related_name='details')
-    priority = models.CharField(max_length=10, choices=PRIORITY_OPTIONS, default='MEDIUM')
+    priority = models.CharField(max_length=10, choices=PRIORITY_OPTIONS, default=MEDIUM)
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
