@@ -99,6 +99,16 @@ def update_task(request,id):
     return render(request, 'task_form.html', context)
 
 
+def delete_task(request, id):
+    if request.method == 'POST':
+        task = Task.objects.get(id=id)
+        task.delete()
+        messages.success(request, 'Task deleted successfully!')
+        return redirect('manager-dashboard')
+    else:
+        messages.error(request, 'Task deletion failed.')
+        return redirect('manager-dashboard')
+
 def view_task(request):
     #  task_count = Task.objects.aggregate(total_tasks = Count('id'))
     # ekta proect er under e kotogula task ache ta dekhate hobe.
