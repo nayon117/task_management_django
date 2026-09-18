@@ -1,9 +1,9 @@
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
 class RegisterForm(UserCreationForm):
-
     class Meta:
         model = User
         fields = ['username','email', 'password1', 'password2']
@@ -15,3 +15,23 @@ class RegisterForm(UserCreationForm):
             self.fields[fieldname].help_text = None
 
        
+class CustomResigtrationForm(forms.ModelForm):
+
+    password = forms.CharField(widget=forms.PasswordInput())
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'confirm_password']
+
+        def clean_password(self):
+            password = self.cleaned_data.get('password')
+            confirm_password = self.cleaned_data.get('confirm_password')
+
+            if(len(password) < 8):
+                raise forms.ValidationError("Password must be at least 8 characters long")
+            
+            if password != confirm_password:
+                raise forms.ValidationError("Passwords don't match")
+
+            return password
