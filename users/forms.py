@@ -24,14 +24,19 @@ class CustomResigtrationForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password', 'confirm_password']
 
-        def clean_password(self):
-            password = self.cleaned_data.get('password')
-            confirm_password = self.cleaned_data.get('confirm_password')
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
 
-            if(len(password) < 8):
-                raise forms.ValidationError("Password must be at least 8 characters long")
-            
-            if password != confirm_password:
-                raise forms.ValidationError("Passwords don't match")
+        errors = []
 
-            return password
+        if(len(password) < 8):
+            errors.append("Password must be at least 8 characters long")
+        
+        if password != confirm_password:
+            errors.append("Passwords don't match")
+
+        if errors:
+            raise forms.ValidationError(errors)
+
+        return password
