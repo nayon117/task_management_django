@@ -9,6 +9,15 @@
     <h1>Welcome to Authentication System</h1>
 
     <div>
+
+        {% if form.non_field_errors %}
+            <ul>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         <form action="{% url 'signup' %}" method="post">
             {% csrf_token %}
             {% for field in form %}
