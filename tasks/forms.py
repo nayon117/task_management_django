@@ -2,6 +2,10 @@ from django import forms
 from tasks.models import Task, TaskDetail
 
 class StyledFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
     default_classes = 'w-full p-3 border border-gray-300 rounded-lg'
     def apply_styled_widgets(self):
         for field_name, field in self.fields.items():
@@ -41,17 +45,9 @@ class TaskModelForm(StyledFormMixin, forms.ModelForm):
             "assigned_to": forms.CheckboxSelectMultiple
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
-
 
 # TaskDetailModelForm
 class TaskDetailModelForm(StyledFormMixin,forms.ModelForm):
     class Meta:
         model = TaskDetail
         fields = ['priority', 'notes']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
