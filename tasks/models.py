@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models import CASCADE
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -60,3 +62,11 @@ class TaskDetail(models.Model):
     def __str__(self):
         return f"Task Detail for {self.task.title}"
 
+
+
+@receiver(pre_save, sender=Task)
+def notify_task_creation(sender, instance, **kwargs):
+    print("sender", sender)
+    print("instance", instance)
+    print(kwargs)
+    instance.is_completed = True
