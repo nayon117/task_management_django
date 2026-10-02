@@ -1,7 +1,9 @@
 from django.db import models
 from django.db.models import CASCADE
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, m2m_changed
 from django.dispatch import receiver
+from django.core.mail import send_mail
+
 
 # Create your models here.
 
@@ -64,9 +66,15 @@ class TaskDetail(models.Model):
 
 
 
-@receiver(pre_save, sender=Task)
-def notify_task_creation(sender, instance, **kwargs):
-    print("sender", sender)
-    print("instance", instance)
-    print(kwargs)
-    instance.is_completed = True
+@receiver(m2m_changed, sender=Task.assigned_to.through)
+def notify_employee_on_task_creation(sender, instance, action, **kwargs):
+    if action == 'post_add':   
+        print(instance, instance.assigned_to.all())
+        assigned_emails = [emp.email for emp in instance.assigned_to.all()]
+
+        send_mail(
+        "New Task Assigned",
+        f"A new task '{instance.title}' has been assigned to you.",
+        "hasibul.nayon1@gmail.com",
+        assigned_emails
+        )
