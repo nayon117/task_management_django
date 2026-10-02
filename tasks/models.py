@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import CASCADE
-from django.db.models.signals import post_save, pre_save, m2m_changed
+from django.db.models.signals import post_save, pre_save, m2m_changed, post_delete
 from django.dispatch import receiver
 from django.core.mail import send_mail
 
@@ -78,3 +78,12 @@ def notify_employee_on_task_creation(sender, instance, action, **kwargs):
         "hasibul.nayon1@gmail.com",
         assigned_emails
         )
+
+
+@receiver(post_delete, sender=Task)
+def delete_associate_details(sender, instance, **kwargs):
+    if instance.details:
+        print(isinstance)
+        instance.details.delete()
+        print("deleted successfully")
+
